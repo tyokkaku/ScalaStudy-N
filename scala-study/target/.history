@@ -1,0 +1,15 @@
+runMain PrintFactorization
+Euclid.greatestCommonDivisor(5,4)
+runMain Euclid.greatestCommonDivisor(5,4)
+runMain Euclid
+runMain Euclid(2,4)
+Euclid.greatestCommonDivisor(2,3)
+runMain Factorization
+runMain Euclid
+runMain PrintFactorization
+runMain SimpleSearch
+indexOf("角川")
+indexOf("らららら")
+:quit
+runMain PartialSumDFS
+:quit
