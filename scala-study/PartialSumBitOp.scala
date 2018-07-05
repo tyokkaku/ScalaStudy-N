@@ -1,33 +1,44 @@
+object PartialSumBitOp extends App {
 
-// 深さ優先探索は、最大20個の数字を使って、その和が k になる組み合わせを探す
-// 深さ優先探索は、それぞれにつき「足す」か「足さないか」を全通り確かめていく
-// 深さ優先探索では、n が20個の時、調べる最大回数は 2 の 20通りの 1048757 になる
 
-// 00000000 00000000 00000000 00000000 から
-// 00000000 00001111 11111111 11111111 まで、カウントアップする
+  def printBits(num: Int) = {
+    for (i <- 31 to 0 by -1) {
+      if(i == 23 || i == 15 || i == 7) print(" ")
+      if ((num & (1 << i)) != 0) print("1") else print("0")
+    }
+  }
 
-// 0のとき、足さない
-// 1のとき、与えられた数列から対応する添字の整数を足す
-
-// その合計値が k とマッチするかを確認する
-
-object PartialSumBitOp exnteds App {
   val a = Seq(1, 10, 49, 3, 8, 13, 7, 23, 60, -500, 42, 599, 45, -23, 1, 10, 49, 3, 8, 13)
   val n = a.length
   val k = 444
 
   var isMatch = false
-  var bitscounter = 0   // 00000000 00000000 00000000 00000000
+  var bitsCounter = 0   // 00000000 00000000 00000000 00000000
   val max = ~(-1 << n)  // 00000000 00001111 11111111 11111111
-  
 
+  // 合計ループ回数は (n * 2^n) になる
+    // 2 の n 乗  : 0からmaxまで。bitsCounter。全探索。
+    // n         : 数列の長さ分。maskする回数。添字を足すか足さないか。
+
+  // すべてのパターン(2 の n 乗回)を試す。
   while (!isMatch && bitsCounter <= max) {
     var sum = 0
+    // 「足す」「足さない」を n 個分試す。ビット列から合算する添字を読み取る。
+      //  masked は 数列の添字番号 と 対応する
     for (i <- 0 to (n - 1)) {
       val mask = 1 << i
       val masked = bitsCounter & mask
-      if (masked != 0) sum = sum + a(i)
+//      println("  : bitsCounter" + printBits(bitsCounter))
+//      println("  : mask     " + printBits(mask))
+//      println("  : masked   " + printBits(masked))
+      if (masked != 0) {
+        sum = sum + a(i)  // masked されたものは合算される
+//        println(a(i) + "を足した")
+      } else {
+//        println("足さなかった")
+      }
     }
+//    println("----------------------------------  ")
     if (sum == k) {
       isMatch = true
     } else {
@@ -47,13 +58,3 @@ object PartialSumBitOp exnteds App {
     println("No")
   }
 }
-
-// bitcounter
-// 00000000 00000000 00000000 00000011
-
-// mask
-// i = 2
-// 00000000 00000000 00000000 00000010
-
-// masked
-// 00000000 00000000 00000000 00000010
