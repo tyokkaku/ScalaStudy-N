@@ -1,4 +1,7 @@
+import MainRefactored.Success
+
 import scala.annotation.tailrec
+import scala.util.{Failure, Try}
 
 object Main {
 
@@ -86,7 +89,6 @@ object Main {
     if(sortedSeq == 0) true else isSortedRecursive(0)
   }
 
-
 //  val v1: Option[Int] = Some(2)
 //  val v2: Option[Int] = Some(3)
 //  val v3: Option[Int] = Some(5)
@@ -112,4 +114,88 @@ object Main {
   //    i2 <- f2
   //    i3 <- f3
   //  } yield i3(i2(i1(15)))
+
+//  def createString_(size: Int): Try[String] = {
+//    Try {
+//      require(size >= 0, "sizeはゼロ以上である必要があります")
+//      (for (i <- 0 to size) yield "a").mkString
+//    }
+//  }
+
+
+
 }
+
+
+//def benchmark(f: => Unit) = {
+//  val begin = System.currentTimeMillis()
+//  f
+//  val end = System.currentTimeMillis()
+//  val formatter = java.text.NumberFormat.getNumberInstance()
+//  println(s"time: ${formatter.format(end - begin)}ミリ秒")
+//}
+
+//def benchmarkNano(f: => Unit) = {
+//  val begin = System.nanoTime()
+//  f
+//  val end = System.nanoTime()
+//  val formatter = java.text.NumberFormat.getNumberInstance()
+//  println(s"time: ${formatter.format(end - begin)}ナノ秒")
+//}
+////
+//val list = (1 to 1000000).toList
+////
+//benchmarkNano {
+//  val last = list.last
+//  println(last)
+//}
+
+// 作成 10万要素
+  // Array   : 32,569,520ナノ秒
+  // HashMap : 592,672,493ナノ秒
+  // TreeMap : 731,003,880ナノ秒
+
+// 末尾取得
+  // list : 77,364,550ナノ秒
+  // array: 306,570ナノ秒
+
+
+// 末尾に追加
+  // List = list +: i
+  // Array = array +: i
+
+// 先頭
+  // List = i +: list
+  // Array = i +: i
+
+def filter[T](list: List[T])(f: T => Boolean): List[T] = list.foldLeft(Nil:List[T]){ (x,y) => if(f(y)) y :: x else x }.reverse
+// filter(List(1,2,3,4,5)(x => x % 2 == 1)
+//
+
+// case の違いが意味不明
+
+//def flatten(list:List[_]):List[Any] = list match {
+//  case Nil => Nil
+//    // x: List[_] で、xが、入れ子ではないリストを示す？
+//  case (x: List[_]) :: xs => flatten(x) ++ flatten(xs)
+//  case x :: xs => x :: flatten(xs)
+//}
+
+// 右から順番にたたみ込んで行く
+  // 右から順番にリストに
+
+
+
+//case y.isEmpty == true => y
+//case y: List[_] => x ++ flatten(y)
+
+//(List(1, List(2, List(3, List(4)))))
+//
+//List(2, List(3, List(4)))))
+//
+//List(3, List(4))
+//
+//List(4)
+
+//List(4) ++ List(3, List(4)) ++ List(2, (List(3, List(4))))
+// List[Any] = List(1, 2, 3, 4)
