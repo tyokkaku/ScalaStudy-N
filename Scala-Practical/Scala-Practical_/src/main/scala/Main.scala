@@ -168,7 +168,7 @@ object Main {
   // List = i +: list
   // Array = i +: i
 
-def filter[T](list: List[T])(f: T => Boolean): List[T] = list.foldLeft(Nil:List[T]){ (x,y) => if(f(y)) y :: x else x }.reverse
+//def filter[T](list: List[T])(f: T => Boolean): List[T] = list.foldLeft(Nil:List[T]){ (x,y) => if(f(y)) y :: x else x }.reverse
 // filter(List(1,2,3,4,5)(x => x % 2 == 1)
 //
 
@@ -199,3 +199,14 @@ def filter[T](list: List[T])(f: T => Boolean): List[T] = list.foldLeft(Nil:List[
 
 //List(4) ++ List(3, List(4)) ++ List(2, (List(3, List(4))))
 // List[Any] = List(1, 2, 3, 4)
+
+// トリボナッチ数列
+//scala> def tribs(a: Int , b: Int, c: Int): Stream[Int] = a #:: tribs(b, c, a + b + c)
+
+
+
+//class RichString(val src: String) {
+//  def twice: String = src + src
+//}
+//
+//implicit def enrichString(arg: String): RichString = new RichString(arg)

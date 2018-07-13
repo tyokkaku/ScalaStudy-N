@@ -1,4 +1,4 @@
-name := "Scala-Practical"
+name := "scala-fp"
 
 version := "0.1"
 
