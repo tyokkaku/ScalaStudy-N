@@ -1,0 +1,43 @@
+import scala.util.Try
+
+object UnapplyStudy extends App {
+
+  class User(private val name: String, private val age: Int)
+
+  object User {
+
+    // unapplyメソッドを使って、抽出子(パターンマッチで利用できる状態)にすることができる
+
+    //    def unapply(user: User): Option[(String, Int)] = Some(user.name, user.age)
+    def unapply(obj: Any): Option[(String, Int)] =
+      if (obj.isInstanceOf[User]) {
+        // Any型として受け取るので、変換する必要がある...？
+        val user = obj.asInstanceOf[User]
+        Some((user.name, user.age))
+      } else if (obj.isInstanceOf[String]) {
+        // String型も、@で区切って抽出子として使えるようにする
+        val strs = obj.asInstanceOf[String].split("@")
+        val name = strs.headOption
+        val age = Try { strs.tail.headOption.map(_.toInt) }.toOption.flatten
+        (name, age) match {
+          case (Some(n), Some(a)) => Some((n, a))
+          case _ => None
+        }
+      } else {
+        None
+      }
+  }
+
+  def printPatternMatched(obj: AnyRef): Unit = {
+    obj match {
+      case User(name, age) => println(s"Name: ${name}, Age: ${age}")
+      case _ => println("can't extract")
+    }
+  }
+
+  // Userのインスタンスを抽出子として使う
+  printPatternMatched(new User("Taro",17))
+  // String型を抽出子として使う
+  printPatternMatched("Taro@17")
+
+}
