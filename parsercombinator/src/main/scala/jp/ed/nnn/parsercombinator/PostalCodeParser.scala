@@ -1,10 +1,12 @@
 package jp.ed.nnn.parsercombinator
 
-// <postal-code> ::~ <zone-code> "-" <town-code>
-  // <zone-code> ::= <digit><digit><digit>
-  // <town-code> ::= <digit><digit><digit><digit>
-
 case class PostalCode(zoneCode: String, townCode: String)
+
+// <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+// <zone-code> ::= <digit> <digit> <digit>
+// <town-code> ::= <digit> <digit> <digit> <digit>
+// <postal-code> ::= <zone-code> "-" <town-code>
+
 
 object PostalCodeParser extends MyFirstCombinator {
 
@@ -14,10 +16,11 @@ object PostalCodeParser extends MyFirstCombinator {
     t: ((String, String), String) => t._1._1 + t._1._2 + t._2
   })
 
-  def townCode: Parser[String] = map(combine(combine(combine(digit, digit),digit)), digit), {
-    t: (())
-  }
+  def townCode: Parser[String] = map(combine(combine(combine(digit, digit), digit), digit), {
+    t: (((String, String),String),String) => t._1._1._1 + t._1._1._2 + t._1._2 + t._2
+  })
 
-
-
+  def apply(input: String): ParseResult[PostalCode] = map(combine(combine(zoneCode, s("-")), townCode), {
+    t: ((String, String), String) => PostalCode(t._1._1, t._2)
+  })(input)
 }

@@ -210,3 +210,4 @@ object Main {
 //}
 //
 //implicit def enrichString(arg: String): RichString = new RichString(arg)
+

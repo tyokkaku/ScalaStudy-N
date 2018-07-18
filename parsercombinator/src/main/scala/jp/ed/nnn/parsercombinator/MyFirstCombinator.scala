@@ -11,7 +11,6 @@ abstract class MyFirstCombinator {
   // 「String を ParseResult に変換するようなもの」を、Parser と名付けている
   type Parser[+T] = String => ParseResult[T]
 
-
   // 文字列を String型 としてパースするパーサー
   // 与えられた文字列が、設定した文字列と同じなら、successを返す
   def string(literal: String): Parser[String] = input => {
@@ -51,16 +50,29 @@ abstract class MyFirstCombinator {
 
   // 逐次合成
   // left と right を1つずつ適用して、両方成功時に、両方の結果を返す。どちらかが失敗すれば、Failure
-  def combine[T, U](left: Parser[T], right: Parser[U]): Parser[(T,U)] = input => {
+  def combine[T,U](left: Parser[T], right: Parser[U]): Parser[(T,U)] = input => {
     left(input) match {
       case Success(value1, next1) =>
         right(next1) match {
           case Success(value2, next2) =>
             Success((value1, value2), next2)
-          case Failure =>
-            Failure
+          case Failure => Failure
         }
+      case Failure => Failure
     }
+  }
+
+  def req[T](parser: Parser[T]): Parser[List[T]] = input => {
+
+    def repeatRec(input: String): (List[T], String) = parser(input) match {
+      case Success(value, next1) =>
+        val(result, next2) = repeatRec(next1)
+        (value::result, next2)
+      case Failure => (Nil, input)
+    }
+
+    val (result, next) = repeatRec(input)
+    Success(result, next)
   }
 
   // 値の型の変更をする
@@ -71,6 +83,4 @@ abstract class MyFirstCombinator {
       case Failure => Failure
     }
   }
-
-
 }
