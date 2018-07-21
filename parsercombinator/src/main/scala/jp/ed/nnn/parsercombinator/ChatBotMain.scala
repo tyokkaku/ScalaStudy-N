@@ -4,11 +4,10 @@ import scala.annotation.tailrec
 import scala.io.Source
 
 object ChatBotMain extends App {
-
-  val text = Source.fromFile("./chatbot.text").mkString
+  val text = Source.fromFile("./chatbot.txt").mkString
   val chatBot: ChatBot = ChatBotTextParser(text) match {
     case ChatBotTextParser.Success(result, _) => result
-    case failure: ChatBotTextParser.NoSuccess => scala.sys.error(failure.toString)
+    case failure: ChatBotTextParser.NoSuccess =>  scala.sys.error(failure.toString)
   }
   println("chatBot: " + chatBot)
   println("ChatBot booted.")
@@ -20,7 +19,7 @@ object ChatBotMain extends App {
 
     @tailrec
     def execute(input: String, commands: List[Command]): Unit = {
-      if (commands.nonEmpty &&  !commands.head.exec(input)) {
+      if (commands.nonEmpty && !commands.head.exec(input)) {
         execute(input, commands.tail)
       }
     }
